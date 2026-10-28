@@ -338,22 +338,31 @@ This project demonstrates practical experience with:
 
 ## 12. Current Status and Future Improvements
 
-The core backend capabilities—including incident management, authentication, authorization, AI-assisted analysis, analysis history, validation, exception handling, and pagination/sorting—have been implemented and tested.
+### Current Status
 
-Potential next improvements include:
+TraceWise AI implements the core backend functionality for API incident management, including:
 
-* A dedicated web dashboard for incident monitoring.
-* Containerization with Docker and Docker Compose.
-* CI/CD automation.
-* Centralized logging, metrics, and monitoring.
-* Improved AI prompts, structured model output, and analysis quality evaluation.
-* Production deployment with a securely hosted AI service.
-* Additional automated tests for CRUD, validation, and failure scenarios.
+* Incident management with CRUD operations, pagination, and sorting.
+* User registration and login using Spring Security and JWT authentication.
+* Role-based authorization and secure API access.
+* AI-assisted incident analysis and analysis history.
+* Input validation and centralized exception handling.
+* PostgreSQL database integration using Spring Data JPA and Hibernate.
+* REST API documentation and testing using Swagger UI and Postman.
 
-These enhancements are future work unless explicitly implemented in the current repository.
+### Future Improvements
+
+The following enhancements are planned for future development:
+
+* **Web Dashboard:** Build a dedicated interface for incident monitoring and analysis.
+* **Docker Integration:** Containerize the application using Docker and Docker Compose.
+* **CI/CD Automation:** Automate the build, testing, and deployment process.
+* **Monitoring and Logging:** Introduce centralized logging, application metrics, and monitoring.
+* **AI Enhancements:** Improve prompts, structure model outputs, and evaluate analysis quality.
+* **Cloud Deployment:** Deploy the application using secure production infrastructure.
+* **Automated Testing:** Expand test coverage for CRUD operations, validation, authentication, and failure scenarios.
+
+These improvements represent planned enhancements and are not part of the current implementation unless explicitly completed.
 
 ---
 
-## License
-
-Choose and add an appropriate open-source license before publicly distributing the project.
