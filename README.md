@@ -366,3 +366,21 @@ These improvements represent planned enhancements and are not part of the curren
 
 ---
 
+<<<<<<< HEAD
+=======
+---
+
+## Screenshots
+
+### 1. Swagger API Documentation
+![Swagger API Documentation](screenshots/swagger-api.png)
+
+### 2. Login API Response
+![Login API Response](screenshots/login-api-response.png)
+
+### 3. Incident API Response
+![Incident API Response](screenshots/incident-api-response.png)
+
+### 4. PostgreSQL Incident Data
+![PostgreSQL Incident Data](screenshots/postgresql-incident-data.png)
+>>>>>>> 0939472 (Add project screenshots and update README)

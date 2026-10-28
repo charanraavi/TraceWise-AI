@@ -8,6 +8,10 @@ import com.tracewise.ai.exception.IncidentNotFoundException;
 import com.tracewise.ai.response.ResponceStructure;
 import com.tracewise.ai.service.IncidentService;
 import com.tracewise.ai.service.OllamaService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/api/incidents")
 public class IncidentController {
 
     private final IncidentService incidentService;
@@ -35,7 +40,25 @@ public class IncidentController {
         this.incidentService = incidentService;
         this.ollamaService = ollamaService;
     }
-    @PostMapping("/api/incidents")
+    @Operation(
+            summary = "Create Incident",
+            description = "Creates a new incident using the incident details provided in the request body."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Incident created successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid incident details"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized access"
+            )
+    })
+    @PostMapping
     public ResponseEntity<ResponceStructure<IncidentResponse>> createIncident(
             @Valid @RequestBody IncidentRequest request) {
 
@@ -60,8 +83,21 @@ public class IncidentController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-
-    @GetMapping("/api/incidents")
+    @Operation(
+            summary = "Get All Incidents",
+            description = "Retrieves all incidents with support for pagination and sorting."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Incidents retrieved successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized access"
+            )
+    })
+    @GetMapping
     public ResponseEntity<ResponceStructure<Page<IncidentResponse>>> getAllIncidents(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
@@ -87,8 +123,25 @@ public class IncidentController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    @GetMapping("/api/incidents/{id}")
-    public ResponseEntity<ResponceStructure<IncidentResponse>> getIncidentById(
+    @Operation(
+            summary = "Get Incident By ID",
+            description = "Retrieve an incident using its unique ID."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Incident retrieved successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Incident not found"
+            )
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponceStructure<IncidentResponse>> getIncidentById(@Parameter(
+            description = "Unique ID of the incident",
+            required = true
+    )
             @PathVariable Long id) {
 
         Incident incident = incidentService.getIncidentById(id);
@@ -107,7 +160,25 @@ public class IncidentController {
     }
 //updating based on id
 
-    @PutMapping("/api/incidents/{id}")
+    @Operation(
+            summary = "Update Incident",
+            description = "Updates an existing incident using its ID and the provided incident details."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Incident updated successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Incident not found"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid incident details"
+            )
+    })
+    @PutMapping("/{id}")
     public ResponseEntity<ResponceStructure<IncidentResponse>> updateIncident(
             @PathVariable Long id,
             @Valid @RequestBody IncidentRequest request) {
@@ -133,8 +204,21 @@ public class IncidentController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     //deleting incident by id
-
-    @DeleteMapping("/api/incidents/{id}")
+    @Operation(
+            summary = "Delete Incident",
+            description = "Deletes an existing incident using its unique ID."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Incident deleted successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Incident not found"
+            )
+    })
+    @DeleteMapping("/{id}")
     public ResponseEntity<ResponceStructure<String>> deleteIncident(
             @PathVariable Long id) {
 
@@ -148,9 +232,30 @@ public class IncidentController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-    @GetMapping("/api/incidents/status/{status}")
+    @Operation(
+            summary = "Get Incidents By Status",
+            description = "Retrieves all incidents matching the specified status."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Incidents retrieved successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid incident status"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized access"
+            )
+    })
+    @GetMapping("/status/{status}")
     public ResponseEntity<ResponceStructure<List<IncidentResponse>>> getByStatus(
+            @Parameter(
+                    description = "Status used to filter incidents",
+                    required = true
+            )
             @PathVariable String status) {
 
         List<IncidentResponse> incidents = incidentService
@@ -168,10 +273,31 @@ public class IncidentController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-    @GetMapping("/api/incidents/status-code/{statusCode}")
+    @Operation(
+            summary = "Get Incidents By Status Code",
+            description = "Retrieves incidents matching the specified HTTP or application status code."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Incidents retrieved successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid status code"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized access"
+            )
+    })
+    @GetMapping("/status-code/{statusCode}")
     public ResponseEntity<ResponceStructure<List<IncidentResponse>>> getByStatusCode(
-            @PathVariable Integer statusCode) {
+            @Parameter(
+                    description = "Status code used to filter incidents",
+                    required = true
+            )
+            @PathVariable int statusCode) {
 
         List<IncidentResponse> incidents = incidentService
                 .getIncidentsByStatusCode(statusCode)
@@ -188,8 +314,25 @@ public class IncidentController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-    @PostMapping("/api/incidents/{id}/analyze")
+    @Operation(
+            summary = "Analyze Incident Using AI",
+            description = "Analyzes an incident and provides possible root causes and troubleshooting recommendations."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Incident analyzed successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Incident not found"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized access"
+            )
+    })
+    @PostMapping("/{id}/analyze")
     public ResponseEntity<ResponceStructure<String>> analyzeIncident(
             @PathVariable Long id) {
 
@@ -240,7 +383,24 @@ public class IncidentController {
 
         return ResponseEntity.ok(response);
     }
-
+    @Operation(
+            summary = "Get Incident Analysis History",
+            description = "Retrieves the previously generated AI analysis records for a specific incident."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Analysis history retrieved successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Incident not found"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized access"
+            )
+    })
     @GetMapping("/{id}/analysis-history")
     public ResponseEntity<List<IncidentAnalysisResponse>> getAnalysisHistory(
             @PathVariable Long id) {
@@ -251,6 +411,24 @@ public class IncidentController {
         return ResponseEntity.ok(history);
     }
 
+    @Operation(
+            summary = "Get Paginated Analysis History",
+            description = "Retrieves incident analysis history page by page, with support for pagination and sorting."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Paginated analysis history retrieved successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Incident not found"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized access"
+            )
+    })
     @GetMapping("/{id}/analysis-history/page")
     public ResponseEntity<Page<IncidentAnalysisResponse>> getAnalysisHistoryPage(
             @PathVariable Long id,

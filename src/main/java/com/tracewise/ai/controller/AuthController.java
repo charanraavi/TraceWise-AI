@@ -6,6 +6,9 @@ import com.tracewise.ai.dto.LoginResponse;
 import com.tracewise.ai.dto.RegisterRequest;
 import com.tracewise.ai.service.AuthService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -24,6 +27,24 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @Operation(
+            summary = "Login User",
+            description = "Authenticates a registered user and returns a JWT token for accessing protected APIs."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Login successful and JWT token generated"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Invalid email or password"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid login request"
+            )
+    })
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(
             @Valid @RequestBody LoginRequest request) {
@@ -32,7 +53,24 @@ public class AuthController {
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
-
+    @Operation(
+            summary = "Register User",
+            description = "Registers a new user account for accessing TraceWise AI."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "User registered successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid registration details"
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "User already exists"
+            )
+    })
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> register(
             @Valid @RequestBody RegisterRequest request) {

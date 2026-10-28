@@ -16,9 +16,9 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("TraceWise AI API")
+                        .title("TraceWise AI ")
                         .version("1.0")
-                        .description("API Incident Management Platform"))
+                        .description("Intelligent API Incident Management Platform"))
                 .components(new Components()
                         .addSecuritySchemes(
                                 "Bearer Authentication",
